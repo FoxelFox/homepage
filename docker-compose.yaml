@@ -11,8 +11,3 @@ services:
 
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
-
-networks:
-  default:
-    name: nginx
-    external: true
