@@ -1,0 +1,3 @@
+[submodule "apps/astro-stream"]
+	path = apps/astro-stream
+	url = git@github.com:FoxelFox/astro-stream.git

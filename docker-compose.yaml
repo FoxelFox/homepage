@@ -1,0 +1,18 @@
+include:
+  - apps/astro-stream/docker-compose.yaml
+services:
+  app:
+    image: jc21/nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 81:81
+
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+
+networks:
+  default:
+    name: nginx
+    external: true
