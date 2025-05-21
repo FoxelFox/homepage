@@ -1,0 +1,17 @@
+{
+  "name": "homepage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "client": "bun build src/client/index.html --outdir=dist --sourcemap --chunk-naming [name].[ext]",
+    "server": "bun src/server/main.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/bun": "^1.2.12",
+  }
+}

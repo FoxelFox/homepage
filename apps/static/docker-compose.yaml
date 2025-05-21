@@ -1,0 +1,11 @@
+services:
+    static:
+        build: .
+        ports:
+            -   3002:3000
+        volumes:
+            - ${static_dir}:/var/www/public
+
+networks:
+    default:
+        name: nginx

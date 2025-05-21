@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VanillaJS Component</title>
+    <style>
+        /* Global styles - won't affect shadow DOM by default */
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<simple-counter start-value="5"></simple-counter>
+<simple-counter start-value="10" label="Items:"></simple-counter>
+
+<script>
+    class SimpleCounter extends HTMLElement {
+        constructor() {
+            super(); // Always call super first in constructor
+
+            // Create a shadow root
+            this.attachShadow({mode: 'open'}); // 'open' allows JS access from outside
+
+            // Initial state
+            this._value = 0;
+            this._label = "Count:"; // Default label
+
+            // Define the component's internal HTML structure and style
+            this.shadowRoot.innerHTML = `
+                    <style>
+                        /* Component-specific styles - encapsulated! */
+                        :host { /* Selects the custom element itself */
+                            display: inline-block;
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            border-radius: 5px;
+                            margin: 5px;
+                        }
+                        button {
+                            padding: 5px 10px;
+                            margin: 0 5px;
+                            background-color: #007bff;
+                            color: white;
+                            border: none;
+                            border-radius: 3px;
+                            cursor: pointer;
+                        }
+                        button:hover {
+                            background-color: #0056b3;
+                        }
+                        span {
+                            font-weight: bold;
+                            min-width: 20px;
+                            display: inline-block;
+                            text-align: center;
+                        }
+                    </style>
+                    <div>
+                        <span id="label"></span> <span id="value"></span>
+                        <button id="decrement">-</button>
+                        <button id="increment">+</button>
+                    </div>
+                `;
+
+            // Get references to internal elements
+            this._valueElement = this.shadowRoot.querySelector('#value');
+            this._labelElement = this.shadowRoot.querySelector('#label');
+            this._incrementButton = this.shadowRoot.querySelector('#increment');
+            this._decrementButton = this.shadowRoot.querySelector('#decrement');
+        }
+
+        // --- Lifecycle Callbacks ---
+        connectedCallback() {
+            console.log('Custom element added to page.');
+            this._updateRendering(); // Initial render
+
+            // Add event listeners
+            this._incrementButton.addEventListener('click', this._increment.bind(this));
+            this._decrementButton.addEventListener('click', this._decrement.bind(this));
+        }
+
+        disconnectedCallback() {
+            console.log('Custom element removed from page.');
+            // Remove event listeners to prevent memory leaks (though modern browsers are good at this for shadow DOM)
+            this._incrementButton.removeEventListener('click', this._increment.bind(this));
+            this._decrementButton.removeEventListener('click', this._decrement.bind(this));
+        }
+
+        // --- Attribute Handling (Props) ---
+        static get observedAttributes() {
+            return ['start-value', 'label']; // Attributes to watch for changes
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            console.log(`Attribute ${name} changed from ${oldValue} to ${newValue}`);
+            if (name === 'start-value') {
+                const parsedValue = parseInt(newValue, 10);
+                if (!isNaN(parsedValue)) {
+                    this._value = parsedValue;
+                }
+            } else if (name === 'label') {
+                this._label = newValue || "Count:"; // Use new value or default
+            }
+            this._updateRendering();
+        }
+
+        // --- Internal Methods (State Management & Rendering) ---
+        _increment() {
+            this._value++;
+            this._updateRendering();
+            // Optionally, dispatch an event if parent components need to know
+            this.dispatchEvent(new CustomEvent('valueChanged', {detail: {value: this._value}}));
+        }
+
+        _decrement() {
+            this._value--;
+            this._updateRendering();
+            this.dispatchEvent(new CustomEvent('valueChanged', {detail: {value: this._value}}));
+        }
+
+        _updateRendering() {
+            if (this._valueElement && this._labelElement) {
+                this._valueElement.textContent = this._value;
+                this._labelElement.textContent = this._label;
+            }
+        }
+
+        // --- Public Properties/Methods (API for your component) ---
+        get value() {
+            return this._value;
+        }
+
+        set value(newValue) {
+            const parsedValue = parseInt(newValue, 10);
+            if (!isNaN(parsedValue)) {
+                this._value = parsedValue;
+                this._updateRendering();
+            }
+        }
+    }
+
+    // Define the new custom element
+    customElements.define('simple-counter', SimpleCounter);
+
+    // Example of listening to the custom event
+    document.querySelector('simple-counter').addEventListener('valueChanged', (e) => {
+        console.log('First counter new value:', e.detail.value);
+    });
+</script>
+</body>
+</html>

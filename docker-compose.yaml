@@ -1,5 +1,6 @@
 include:
   - apps/astro-stream/docker-compose.yaml
+  - apps/static/docker-compose.yaml
 services:
   app:
     image: jc21/nginx-proxy-manager
@@ -11,3 +12,7 @@ services:
 
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
+      - ./data:/data
+networks:
+  default:
+    name: nginx

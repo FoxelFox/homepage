@@ -1,0 +1,4 @@
+apps/static/.env
+.idea
+data
+node_modules
