@@ -38,19 +38,15 @@ backend.main().then(() => {
         async fetch(req) {
 
             let requestedPath = new URL(req.url).pathname;
-            console.log(requestedPath)
 
             let p = requestedPath.split('/');
             if (p[1] === "api") {
                 return backend.router[requestedPath]();
             }
 
-
             if (requestedPath === "/") {
                 requestedPath = "/index.html";
             }
-
-            console.log(requestedPath)
 
             const safeSuffix = path.normalize(requestedPath).replace(/^(\.\.(\/|\\|$))+/, '');
             const filePath = path.join(publicDir, safeSuffix);
@@ -58,6 +54,7 @@ backend.main().then(() => {
             const file = Bun.file(filePath);
 
             if (await file.exists()) {
+                console.log(new Date().toLocaleString(), 200, requestedPath);
                 return new Response(
                     Bun.gzipSync(await file.arrayBuffer()),
                     {
@@ -71,7 +68,8 @@ backend.main().then(() => {
                     }
                 );
             } else {
-                return new Response("404!")
+                console.log(new Date().toLocaleString(), 404, requestedPath);
+                return new Response("404 😔",{status: 404});
             }
         },
     });
