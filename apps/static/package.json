@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "client": "bun build src/client/index.html --outdir=dist --sourcemap --chunk-naming [name].[ext]",
+    "client": "cd src/client && bun install && npm run build",
     "server": "bun src/server/main.ts"
   },
   "devDependencies": {
@@ -12,6 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "@types/bun": "^1.2.12",
+    "@types/bun": "^1.2.12"
   }
 }
