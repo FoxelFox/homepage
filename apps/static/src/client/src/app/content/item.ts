@@ -3,7 +3,8 @@ import {Content} from "../interfaces";
 
 @Component({
   selector: 'item',
-  templateUrl: 'item.html'
+  templateUrl: 'item.html',
+  styleUrl: 'item.scss'
 })
 export class Item {
   @Input() content: Content

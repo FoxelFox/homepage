@@ -6,6 +6,7 @@ import {Content} from "../interfaces";
 @Component({
   selector: 'content-list',
   templateUrl: 'list.html',
+  styleUrl: 'list.scss',
   imports: [
     Item
   ]
