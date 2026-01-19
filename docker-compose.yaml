@@ -1,6 +1,7 @@
 include:
   - apps/astro-stream/docker-compose.yaml
   - apps/static/docker-compose.yaml
+  - apps/gitea/docker-compose.yaml
 services:
   app:
     image: jc21/nginx-proxy-manager

@@ -6,13 +6,21 @@ const publicDir = "/var/www/public";
 class Backend {
 
   demos = () => {
-    const dirs = fs.readdirSync(publicDir, {withFileTypes: true}).filter(e => e.isDirectory()).sort((a, b) => a.name.localeCompare(b.name))
+    const dirs = fs.readdirSync(publicDir, {withFileTypes: true}).filter(e => e.isDirectory()).sort((a, b) => a.name.localeCompare(b.name));
     const data = [];
     for (let dir of dirs) {
-      data.push({
+      const entry = {
         name: dir.name,
-        url: dir.name + '/index.html'
-      })
+        url: dir.name + '/index.html',
+        meta: undefined
+      }
+      try {
+        entry.meta = fs.readFileSync(publicDir + "/" + dir.name + "meta.json").toJSON();
+      } catch (e) {
+        // ignore
+      }
+
+      data.push(entry);
     }
     return Response.json(data);
   };
