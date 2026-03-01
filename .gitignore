@@ -1,5 +1,6 @@
 apps/static/.env
 apps/gitea/gitea
+apps/eve-deal/
 .idea
 data
 node_modules
