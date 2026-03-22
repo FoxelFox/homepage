@@ -9,6 +9,11 @@ export class ApiService {
 
   async getContent() {
     const list = await lastValueFrom(this.http.get<Content[]>("/api/demos"));
+    list.sort((a, b) => {
+      const nameA = a.meta?.name ?? "";
+      const nameB = b.meta?.name ?? "";
+      return nameA.localeCompare(nameB);
+    });
     list.sort((a, b) => Number(!!b.meta) - Number(!!a.meta));
     return list;
   }
