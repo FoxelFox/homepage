@@ -2,6 +2,30 @@
   backdrop-filter: blur(8px);
   background-color: rgba(255, 255, 255, 0.05);
   padding: 16px;
-  border-radius: 16px;
-  border: 1px solid gray;
+  border-radius: 32px;
+  border: 2px solid gray;
+  text-decoration: none;
+  display: block;
+
+  &:hover {
+    border: 2px solid rgb(228, 32, 64);
+  }
+
+  img {
+    width: calc(100% - 8px);
+    border-radius: 16px;
+    border: 2px solid gray;
+  }
+
+  h1 {
+    color: rgb(228, 32, 64);
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  div {
+    color: white;
+    text-align: justify;
+    height: 62px;
+  }
 }
