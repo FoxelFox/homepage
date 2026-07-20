@@ -5,6 +5,7 @@ services:
     environment:
       - USER_UID=1000
       - USER_GID=1000
+      - GITEA__actions__ENABLED=true
     restart: always
     volumes:
       - ./gitea:/data
@@ -13,6 +14,28 @@ services:
     ports:
       - "3003:3000"
       - "222:22"
+    networks:
+      - nginx
+
+  runner:
+    image: docker.io/gitea/act_runner:latest
+    container_name: gitea_runner
+    restart: always
+    depends_on:
+      - server
+    environment:
+      - CONFIG_FILE=/config.yaml
+      - GITEA_INSTANCE_URL=http://gitea:3000
+      - GITEA_RUNNER_REGISTRATION_TOKEN=...
+      - GITEA_RUNNER_NAME=docker_runner
+      - GITEA_RUNNER_LABELS=ubuntu-latest:docker://node:24-bookworm
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+      - ./gitea-runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - nginx
+
 networks:
-  default:
-    name: nginx
+  nginx:
+    external: true

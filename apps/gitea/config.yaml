@@ -1,0 +1,7 @@
+log:
+  level: info
+
+container:
+  network: nginx
+  # Only if checkout uses https://gitea.64f.de and still can't resolve:
+  # options: "--add-host=gitea.64f.de:gitea"
